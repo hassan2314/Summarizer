@@ -19,7 +19,9 @@ app.use(cookieParser());
 //import rotuers
 import userRouter from "./routes/user.routes.js";
 import summaryRouter from "./routes/summary.routes.js";
+import summarizerRoute from "./routes/summarizer.js";
 
+app.use("/api/v1/summarizer", summarizerRoute);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/summary", summaryRouter);
 
