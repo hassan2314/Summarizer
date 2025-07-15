@@ -18,15 +18,21 @@ model User {
   summaries    Summary[]
 }
 
+enum SummaryType {
+  paragraph
+  question
+  bullet
+}
+
 model Summary {
-  id           String   @id @default(uuid())
-  user         User     @relation(fields: [userId], references: [id])
+  id           String      @id @default(uuid())
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
-  // type         String
-  // format       String
+  type         SummaryType
+  name         String
   originalText String
-  summary      String
+  response     String[]
   tags         String[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now()) @updatedAt
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @default(now()) @updatedAt
 }

@@ -12,7 +12,7 @@ export class UserController {
     return jwt.sign(
       { id: user.id, email: user.email },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "7h" }
     );
   };
 
@@ -110,7 +110,13 @@ export class UserController {
       });
       return res
         .status(200)
-        .json(new ApiResponse(200, { accessToken }, "Login successful"));
+        .json(
+          new ApiResponse(
+            200,
+            { token: accessToken, user: user },
+            "Login successful"
+          )
+        );
     } catch (error) {
       throw new ApiError(400, error.message);
     }

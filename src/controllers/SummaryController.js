@@ -7,13 +7,15 @@ export class SummaryController {
   }
 
   create = async (req, res) => {
-    const { orignalText, summary, tags } = req.body;
+    const { originalText, response, tags, type, name } = req.body;
     const userId = req.user.id;
     try {
       const summarySaved = await this.summaryService.create({
-        orignalText,
-        summary,
+        originalText,
+        response,
         tags,
+        type,
+        name,
         userId,
       });
       return res
@@ -59,12 +61,11 @@ export class SummaryController {
   };
 
   updateSummary = async (req, res) => {
-    const { orignalText, summary, tags } = req.body;
+    const { response } = req.body;
+    if (!response) throw new ApiError(400, "Summary is required");
     try {
       const summaryUpdated = await this.summaryService.update(req.params.id, {
-        orignalText,
-        summary,
-        tags,
+        response,
       });
       return res.status(200).json(new ApiResponse(200, summaryUpdated));
     } catch (error) {

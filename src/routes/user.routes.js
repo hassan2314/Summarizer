@@ -8,7 +8,7 @@ const userService = new UserService();
 const userController = new UserController(userService);
 
 router.get("/:id", verifyJwt, userController.findById);
-router.post("/", userController.create);
+router.post("/signup", userController.create);
 router.post("/login", userController.login);
 router.post("/refresh-token", userController.refreshAccessToken);
 router.put("/logout", verifyJwt, userController.logout);

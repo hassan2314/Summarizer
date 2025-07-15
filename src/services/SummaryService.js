@@ -24,6 +24,10 @@ export class SummaryService {
     });
   }
 
+  findById(id) {
+    return prisma.summary.findUnique({ where: { id } });
+  }
+
   async getTopTags(userId) {
     const results = await prisma.summary.findMany({
       where: { userId },
