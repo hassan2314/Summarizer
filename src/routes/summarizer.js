@@ -5,27 +5,50 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const { dialogue, mode } = req.body;
 
-    if (!dialogue || !mode) {
-      throw new ApiError(400, "Dialogue and Mode is required.");
+    // Validation
+    if (!dialogue?.trim()) {
+      throw new ApiError(400, "Dialogue text is required");
+    }
+    if (!mode || !["bullets", "paragraph", "questions"].includes(mode)) {
+      throw new ApiError(
+        400,
+        "Mode must be either 'bullets' or 'paragraph' or 'questions"
+      );
     }
 
-    const response = await axios.post("http://127.0.0.1:8000/summarize", {
-      dialogue,
+    const response = await axios.post(`${process.env.FASTAPI_URL}/summarize`, {
+      dialogue: dialogue.trim(),
       mode,
     });
 
-    res
+    // Forward the response from FastAPI
+    return res
       .status(200)
       .json(
-        new ApiResponse(200, response.data, "Summary fetched successfully")
+        new ApiResponse(
+          200,
+          response.data,
+          response.data.message || "Summary generated successfully"
+        )
       );
   } catch (error) {
-    console.error("🔴 Summarizer API Error:", error.message);
-    throw new ApiError(500, error.message);
+    // Handle Axios errors
+    if (error.isAxiosError) {
+      const apiError = error.response?.data || {
+        message: error.message,
+        statusCode: error.response?.status || 500,
+      };
+      return next(
+        new ApiError(apiError.statusCode, apiError.detail || apiError.message)
+      );
+    }
+
+    // Handle other errors
+    next(error);
   }
 });
 
