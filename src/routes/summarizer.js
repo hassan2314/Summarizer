@@ -13,7 +13,10 @@ router.post("/", async (req, res, next) => {
     if (!dialogue?.trim()) {
       throw new ApiError(400, "Dialogue text is required");
     }
-    if (!mode || !["bullets", "paragraph", "questions"].includes(mode)) {
+    if (
+      !mode ||
+      !["bullets", "paragraph", "questions", "tags"].includes(mode)
+    ) {
       throw new ApiError(
         400,
         "Mode must be either 'bullets' or 'paragraph' or 'questions"
