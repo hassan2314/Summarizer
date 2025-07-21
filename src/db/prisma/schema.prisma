@@ -20,8 +20,8 @@ model User {
 
 enum SummaryType {
   paragraph
-  question
-  bullet
+  questions
+  bullets
 }
 
 model Summary {
