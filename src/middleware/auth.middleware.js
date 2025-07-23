@@ -31,7 +31,7 @@ const verifyJwt = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    next(new ApiError(401, error.message || "Invalid or expired token"));
+    next(new ApiError(401, error.message || "jwt expired"));
   }
 };
 export default verifyJwt;
