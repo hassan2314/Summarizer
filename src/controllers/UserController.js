@@ -12,7 +12,7 @@ export class UserController {
     return jwt.sign(
       { id: user.id, email: user.email },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "7h" }
+      { expiresIn: "25h" }
     );
   };
 
