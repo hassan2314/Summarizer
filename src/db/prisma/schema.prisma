@@ -8,14 +8,15 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(uuid())
+  id           String     @id @default(uuid())
   name         String
-  email        String    @unique
+  email        String     @unique
   password     String
   refreshToken String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now()) @updatedAt
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @default(now()) @updatedAt
   summaries    Summary[]
+  questions    Question[]
 }
 
 enum SummaryType {
@@ -32,6 +33,21 @@ model Summary {
   name         String
   originalText String
   response     String[]
+  tags         String[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @default(now()) @updatedAt
+}
+
+model Question {
+  id           String      @id @default(uuid())
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  type         SummaryType
+  name         String
+  originalText String
+  questions    String[]
+  answers      String[]
+  feedback     String[]
   tags         String[]
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @default(now()) @updatedAt
