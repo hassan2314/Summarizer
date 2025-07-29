@@ -11,7 +11,7 @@ export class QAController {
       req.body;
     const userId = req.user.id;
     try {
-      const summarySaved = await this.summaryService.create({
+      const summarySaved = await this.qaService.createQuestion({
         originalText,
         questions,
         answers,
@@ -33,6 +33,16 @@ export class QAController {
     try {
       const userId = req.user.id;
       const summary = await this.qaService.findByUserId(userId);
+      return res.status(200).json(new ApiResponse(200, summary, "success"));
+    } catch (error) {
+      throw new ApiError(500, error.message);
+    }
+  };
+
+  getQAById = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const summary = await this.qaService.findById(id);
       return res.status(200).json(new ApiResponse(200, summary, "success"));
     } catch (error) {
       throw new ApiError(500, error.message);

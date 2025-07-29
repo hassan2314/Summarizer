@@ -9,6 +9,7 @@ const qaController = new QAController(qaService);
 
 router.use(verifyJwt);
 router.get("/", qaController.getQA);
+router.get("/:id", qaController.getQAById);
 router.post("/", qaController.createQA);
 router.put("/:id", qaController.updateQA);
 router.delete("/:id", qaController.deleteQA);
