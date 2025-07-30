@@ -52,4 +52,37 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.post("/check-batch", async (req, res, next) => {
+  const { qa_pairs, context } = req.body;
+
+  if (!Array.isArray(qa_pairs) || !context) {
+    throw new ApiError(400, "context and qa_pairs[] are required");
+  }
+
+  try {
+    const response = await axios.post(
+      `${process.env.FASTAPI_URL}/check-batch`,
+      { qa_pairs, context }
+    );
+
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(200, response.data, "Batch answer evaluation completed")
+      );
+  } catch (error) {
+    if (error.isAxiosError) {
+      const apiError = error.response?.data || {
+        message: error.message,
+        statusCode: error.response?.status || 500,
+      };
+      return next(
+        new ApiError(apiError.statusCode, apiError.detail || apiError.message)
+      );
+    }
+
+    next(error);
+  }
+});
+
 export default router;

@@ -10,7 +10,7 @@ export class SummaryService {
   async findByUserId(userId) {
     return await prisma.summary.findMany({
       where: { userId },
-      orderBy: { createdAt: "desc" }, // optional
+      orderBy: { createdAt: "desc" },
     });
   }
 
