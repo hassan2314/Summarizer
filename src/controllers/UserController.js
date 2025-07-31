@@ -108,12 +108,20 @@ export class UserController {
         sameSite: "strict",
         maxAge: 1 * 24 * 60 * 60 * 1000,
       });
+      const safeUser = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      };
+
       return res
         .status(200)
         .json(
           new ApiResponse(
             200,
-            { token: accessToken, user: user },
+            { token: accessToken, user: safeUser },
             "Login successful"
           )
         );
